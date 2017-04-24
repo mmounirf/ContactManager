@@ -1,0 +1,224 @@
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="./lib/css/angular-material.min.css">
+  <link rel="stylesheet" href="./lib/css/md-data-table.min.css">
+  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="stylesheet" href="./lib/css/v-accordion.min.css" />
+  <script src="./lib/js/underscore-min.js"></script>
+</head>
+
+<body ng-app="ContactManagerApp" ng-controller="ContactManagerCtrl" ng-cloak>
+  <div layout="column" flex layout-fill ng-cloak>
+    <md-toolbar>
+      <div class="md-toolbar-tools md-whiteframe-3dp title_bar">
+        <div style="width: 82%; height: 100%; -webkit-app-region: drag">
+          <h1 style="margin-top: 10px;">Contact Manager App. <span>V2.0</span></h1>
+
+        </div>
+<div flex></div>
+
+        <div class="titlebar">
+          <md-button class="md-icon-button minimize" id="minimize">
+            <md-icon style=" color:#FFF;">remove</md-icon>
+            <md-tooltip md-direction="bottom">
+              Minimize
+            </md-tooltip>
+          </md-button>
+          <md-button class="md-icon-button maximize-btn" id="maximize">
+            <md-icon style=" color:#FFF;">web_asset</md-icon>
+            <md-tooltip md-direction="bottom">
+              Maximize
+            </md-tooltip>
+          </md-button>
+          <md-button class="md-icon-button close-btn" id="close">
+            <md-icon style=" color:#FFF;">close</md-icon>
+            <md-tooltip md-direction="bottom">
+              Close
+            </md-tooltip>
+          </md-button>
+        </div>
+
+      </div>
+
+    </md-toolbar>
+  <md-card id="dropzoneCard" ng-hide="filePath">
+    <div class="dropzone" id="dropzone">
+      <div class="wrapper">
+        <h2 id="dropzoneMsg"><span>Drag & Drop</span> vCard File (.vcf) here. <br/><br/>
+          You can simply <span>click</span> anywhere inside the dropzone and browse for the file on your computer.</h2>
+          <input type="file" id="fileSelect" style="display: none;" />
+      </div>
+    </div>
+  </md-card>
+  <md-card ng-hide="!filePath" id="contactsTableCard">
+    <md-toolbar class="md-table-toolbar md-default" ng-hide="filter.show" style="padding-top: 5px;">
+      <div class="md-toolbar-tools">
+
+  <span>
+    <md-button class="md-icon-button" ng-click="goback()" style="background-color: #FF4081;">
+      <md-icon style=" color:#FFF;">fiber_new</md-icon>
+      <md-tooltip md-direction="top">
+        Go Back
+      </md-tooltip>
+    </md-button>
+    Contact List
+  </span>
+
+        <div flex></div>
+        <md-button id="folderSelect" class="md-icon-button" ng-click="createContact()">
+          <md-icon style="color: #4285f4">person_add</md-icon>
+          <md-tooltip md-direction="top">
+            Add New Contact
+          </md-tooltip>
+        </md-button>
+
+        <md-button id="folderSelect" class="md-icon-button" ng-click="import()">
+          <md-icon style="color: #ea4335">queue</md-icon>
+          <md-tooltip md-direction="top">
+            Import vCard
+          </md-tooltip>
+        </md-button>
+
+        <md-button id="folderSelect" class="md-icon-button" ng-click="exportXLSX()">
+          <md-icon style="color: #fbbc05">grid_on</md-icon>
+          <md-tooltip md-direction="top">
+            Export Excel Sheet
+          </md-tooltip>
+        </md-button>
+
+        <md-button class="md-icon-button" ng-click="export()">
+          <md-icon style="color: #4285f4">save</md-icon>
+          <md-tooltip md-direction="top">
+            Export vCard
+          </md-tooltip>
+        </md-button>
+        <md-button id="refreshBtn" class="md-icon-button" ng-click="refresh()">
+          <md-icon style="color: #34a853">refresh</md-icon>
+          <md-tooltip md-direction="top">
+            Refresh
+          </md-tooltip>
+        </md-button>
+
+        <md-button id="deleteBtn" class="md-icon-button" ng-click="undoDelete()" ng-hide="deletedContacts.length<1" ng-disabled="deletedContacts.length<1">
+          <span class="deletedContactsCount">
+            {{deletedContacts.length}}
+          </span>
+          <md-icon style="color: #7C4DFF">delete</md-icon>
+          <md-tooltip md-direction="top">
+            Retrieve {{deletedContacts[0].fn}}
+          </md-tooltip>
+        </md-button>
+
+        <md-button class="md-icon-button" ng-click="filter.show = true">
+          <md-icon style="color: #ea4335">search</md-icon>
+          <md-tooltip md-direction="top">
+            Search
+          </md-tooltip>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-toolbar class="md-table-toolbar md-default ng-hide" ng-show="filter.show" style="padding-top: 5px;">
+      <div class="md-toolbar-tools">
+        <md-input-container flex md-no-float class="md-block md-icon-left" style="padding-top: 15px;">
+          <i class="material-icons" style="top: 22px;">search</i>
+              <input ng-model="search.$" type="text" placeholder="Search Contact" id="searchInput" show-focus="filter.show">
+         </md-input-container>
+        <button class="md-icon-button md-button md-ink-ripple" type="button" ng-click="filter.show = false; search.$=''" aria-label="close">
+          <md-icon class="material-icons">close</md-icon>
+          <md-tooltip md-direction="top">
+            Close Search
+          </md-tooltip>
+        </button>
+      </div>
+    </md-toolbar>
+<md-table-container>
+
+  <table md-table ng-model="contacts" style="contactsTable" md-progress="promise">
+    <thead md-head md-order="query.order">
+      <tr md-row>
+        <th md-column style="width: 5%; text-align:center;"></th>
+        <th md-column md-order-by="fn">Full Name</th>
+        <th md-column>Phone Numbers</th>
+        <th md-column>Email Accounts</th>
+        <th md-column md-order-by="title">Title</th>
+        <th md-column md-order-by="org">Organization</th>
+        <th md-column style="width: 6%; text-align:center;">Actions</th>
+      </tr>
+    </thead>
+    <tbody md-body>
+
+    <tr md-row ng-repeat="contact in contacts | filter:search:strict | limitTo: query.limit : (query.page -1) * query.limit | orderBy: query.order" ng-class="{duplicateEntry: isDuplicate, uniqueEntry: !isDuplicate}" id="{{contact.$$hashKey}}">
+        <td md-cell style="width: 5%;" id="{{contact.$$hashKey}}" ng-click="editContact($event)" class="md-ink-ripple"><div ng-show="contact.photo" style="background: url(data:image/jpg;base64,{{contact.photo}});" ng-class="{photo: contact.photo, noPhoto: !contact.photo}">
+        </div><h1 ng-style="{background: colorsArray[$index % colorsArray.length]}" data-id="{{contact.$$hashKey}}" ng-attr="{{colorsArray[$index % colorsArray.length]}}" class="contactLetter" ng-show="!contact.photo">{{contact.fn.trim().charAt(0).toUpperCase()}}</h1></td>
+        <td md-cell id="{{contact.$$hashKey}}" ng-click="editContact($event)" class="md-ink-ripple">{{contact.fn}}</td>
+        <td md-cell id="numbersColumn">
+          <v-accordion class="vAccordion--default" multiple>
+              <v-pane expanded="pane.isExpanded" ng-class="{'no-content' : (contact.datapoints | filter:name='tel').length == 1}">
+                <v-pane-header>
+                  <h4 class="firstNumber">{{contact.datapoints[0].value}}</h4>
+
+                </v-pane-header>
+                  <span ng-hide="(contact.datapoints | filter:name='tel').length == 1 || pane.isExpanded" class="numbersCount">+{{(contact.datapoints | filter:name='tel').length-1}}</span>
+
+                <v-pane-content>
+                  <ul class="contactNumbersList" id="contactNumbers">
+                    <li class="contactNumbers" ng-repeat="number in contact.datapoints | filter:name='tel'" ng-if="$index > 0">
+                      {{number.value}}
+                      <span class="phoneType">({{number.type}} {{number.name}})</span>
+                    </li>
+                  </ul>
+                </v-pane-content>
+              </v-pane>
+            </v-accordion>
+        </td>
+        <td md-cell>
+          <ul class="contactNumbersList" id="contactNumbers">
+            <li class="contactNumbers" ng-repeat="email in contact.datapoints | filter:name='email'">
+              {{email.value}}
+              <span class="phoneType">({{email.type}})</span>
+            </li>
+          </ul>
+        </td>
+        <td md-cell>{{contact.title}}</td>
+        <td md-cell>{{contact.org}}</td>
+        <td md-cell style="width: 6%;">
+
+          <md-button class="md-icon-button md-primary editContact" id="{{contact.$$hashKey}}" ng-click="editContact($event)" aria-label="Visibility">
+            <i class="material-icons contact-edit">edit</i>
+            <md-tooltip md-direction="top">
+              Edit {{contact.fn}}
+            </md-tooltip>
+          </md-button>
+
+          <md-button class="md-icon-button md-danger delteContact" id="{{contact.$$hashKey}}" ng-click="deleteContact($event)" aria-label="Visibility">
+            <i class="material-icons contact-delete">delete</i>
+            <md-tooltip md-direction="top">
+              Delete {{contact.fn}}
+            </md-tooltip>
+          </md-button>
+        </td>
+        <!-- <td md-cell>{{contact.$$hashKey}}</td> -->
+      </tr>
+    </tbody>
+  </table>
+</md-table-container>
+
+<md-table-pagination style="min-height: 50px;" md-limit="query.limit" md-limit-options="limitOptions" md-page="query.page" md-total="{{count}}" md-page-select="options.pageSelect" md-boundary-links="options.boundaryLinks">
+</md-table-pagination>
+    </div>
+      </md-card>
+
+
+  <script src="./lib/js/angular.min.js"></script>
+  <script src="./lib/js/angular-animate.min.js"></script>
+  <script src="./lib/js/angular-aria.min.js"></script>
+  <script src="./lib/js/angular-messages.min.js"></script>
+  <script src="./lib/js/md-data-table.min.js"></script>
+  <script src="./lib/js/fixed-table-header.min.js"></script>
+  <script src="./lib/js/v-accordion.min.js"></script>
+  <script src="./lib/js/angular-material.min.js"></script>
+  <script src="./js/app.js"></script>
+
+</body>
+</html>

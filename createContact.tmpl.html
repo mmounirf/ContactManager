@@ -1,0 +1,142 @@
+<md-dialog>
+  <form>
+    <md-toolbar style="background-color: {{contactColor}};">
+      <div class="md-toolbar-tools">
+        <h2><i class="material-icons">person_add</i> Create Contact | {{fn}}</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <i class="material-icons">close</i>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+      <md-tabs md-dynamic-height md-border-bottom>
+        <md-tab label="Basic Info" style="color: {{contactColor}};">
+          <md-content class="md-padding">
+            <md-card ng-class="{contactImageCard: photo, contactLetterCard: !photo}" style="background: url(data:image/jpg;base64,{{photo}}); background-color: #4caf50;" class="md-whiteframe-8dp" ng-model="photo" data-id="{{$$hashKey}}">
+              <h1 ng-show="!photo" class="editLetter">{{fn.trim().charAt(0).toUpperCase()}}</h1>
+              <button class="md-raised md-accent md-button md-ink-ripple md-button changeContactPhoto" type="button" ng-click="getImage()">
+                  Add Photo
+              </button>
+            </md-card>
+            <div layout="row">
+               <md-input-container class="md-icon-float md-block md-icon-left">
+                     <label for="contact-prefix">Prefix</label>
+                     <i class="material-icons">{{n | iconfilter}}</i>
+                     <input ng-model="prefix" type="text" ng-change="fn=prefix+' '+firstname+' '+middlename+' '+lastname+' '+suffix;n = lastname+';'+firstname+';'+middlename+';'+prefix+';'+suffix">
+                </md-input-container>
+               <md-input-container class="md-icon-float md-block md-icon-left">
+                     <label for="contact-firstname">First Name</label>
+                     <i class="material-icons">{{n | iconfilter}}</i>
+                     <input ng-model="firstname" type="text" ng-change="fn=prefix+' '+firstname+' '+middlename+' '+lastname+' '+suffix;n = lastname+';'+firstname+';'+middlename+';'+prefix+';'+suffix">
+                </md-input-container>
+                <md-input-container class="md-icon-float md-block md-icon-left">
+                      <label for="contact-middlename">Middle Name</label>
+                      <i class="material-icons">{{n | iconfilter}}</i>
+                      <input ng-model="middlename" type="text" ng-change="fn=prefix+' '+firstname+' '+middlename+' '+lastname+' '+suffix;n = lastname+';'+firstname+';'+middlename+';'+prefix+';'+suffix">
+                 </md-input-container>
+                <md-input-container class="md-icon-float md-block md-icon-left">
+                      <label for="contact-lastname">Last Name</label>
+                      <i class="material-icons">{{n | iconfilter}}</i>
+                      <input ng-model="lastname" type="text" ng-change="fn=prefix+' '+firstname+' '+middlename+' '+lastname+' '+suffix;n = lastname+';'+firstname+';'+middlename+';'+prefix+';'+suffix">
+                 </md-input-container>
+                  <md-input-container class="md-icon-float md-block md-icon-left">
+                        <label for="contact-suffix">Suffix</label>
+                        <i class="material-icons">{{n | iconfilter}}</i>
+                        <input ng-model="suffix" type="text" ng-change="fn=prefix+' '+firstname+' '+middlename+' '+lastname+' '+suffix;n = lastname+';'+firstname+';'+middlename+';'+prefix+';'+suffix">
+                   </md-input-container>
+            </div>
+
+            <md-input-container class="md-icon-float md-block md-icon-left">
+                  <label for="contact-fn">Full Name</label>
+                  <i class="material-icons">account_box</i>
+                  <input ng-model="fn" type="text" ng-change="prefix=fn.split(' ')[0];firstname=fn.split(' ')[1];middlename=fn.split(' ')[2];lastname=fn.split(' ')[3];suffix=fn.split(' ')[4];n = lastname+';'+firstname+';'+middlename+';'+prefix+';'+suffix">
+             </md-input-container>
+             <input type="hidden" ng-model="n"/>
+             <md-input-container class="md-icon-float md-block md-icon-left">
+                   <label for="contact-nickname">Nickname</label>
+                   <i class="material-icons">account_box</i>
+                   <input ng-model="nickname" type="text">
+              </md-input-container>
+             <md-input-container class="md-icon-float md-block md-icon-left">
+                   <label for="contact-org">Organization</label>
+                   <i class="material-icons">work</i>
+                   <input ng-model="org" type="text">
+              </md-input-container>
+              <md-input-container class="md-icon-float md-block md-icon-left">
+                    <label for="contact-title">Title</label>
+                    <i class="material-icons">account_box</i>
+                    <input ng-model="title" type="text">
+               </md-input-container>
+               <md-input-container class="md-icon-float md-block md-icon-left">
+                     <label for="contact-bday">Birthday</label>
+                     <i class="material-icons">cake</i>
+                     <input ng-model="bday" type="text">
+                </md-input-container>
+                <md-input-container class="md-icon-float md-block md-icon-left">
+                      <label for="contact-url">Website</label>
+                      <i class="material-icons">link</i>
+                      <input ng-model="url" type="text">
+                 </md-input-container>
+          </md-content>
+        </md-tab>
+        <md-tab label="Extra Info">
+          <md-content class="md-padding">
+            <div class="extra-info-wrapper">
+              <div class="row" style="text-align: center; margin-bottom: 25px;">
+                    <md-button class="md-fab" style="background-color: #4285f4" aria-label="Mobile Number" ng-click="addMobileNumber()">
+                        <i class="material-icons">smartphone</i>
+                        <md-tooltip md-direction="top">
+                          Add Mobile Number
+                        </md-tooltip>
+                    </md-button>
+                    <md-button class="md-fab" style="background-color: #ea4335" aria-label="Phone Number" ng-click="addPhoneNumber()">
+                        <i class="material-icons">phone</i>
+                        <md-tooltip md-direction="top">
+                          Add Phone Number
+                        </md-tooltip>
+                    </md-button>
+                    <md-button class="md-fab" style="background-color: #fbbc05" aria-label="Address" ng-click="addWorkAddress()">
+                        <i class="material-icons">work</i>
+                        <md-tooltip md-direction="top">
+                          Add Work Address
+                        </md-tooltip>
+                    </md-button>
+                    <md-button class="md-fab" style="background-color: #4285f4" aria-label="Address" ng-click="addHomeAddress()">
+                        <i class="material-icons">home</i>
+                        <md-tooltip md-direction="top">
+                          Add Home Address
+                        </md-tooltip>
+                    </md-button>
+                    <md-button class="md-fab" style="background-color: #34a853" aria-label="Email" ng-click="addEmail()">
+                        <i class="material-icons">email</i>
+                        <md-tooltip md-direction="top">
+                          Add Email
+                        </md-tooltip>
+                    </md-button>
+                  </div>
+                    <div flex></div>
+                <md-input-container class="md-icon-float md-block md-icon-left extra-info-inputs" data-ng-repeat="field in fields">
+                      <label for="{{field.name}}">{{field.name +"-"+ field.type | textfilter}}</label>
+                      <i class="material-icons">{{field.name +"-"+ field.type | iconfilter}}</i>
+                      <input type="text" id="field[$index]" ng-model="field.value">
+                 </md-input-container>
+
+
+
+            </div>
+          </md-content>
+        </md-tab>
+      </md-tabs>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+      <span flex></span>
+      <md-button class="md-raised md-warn md-button md-ink-ripple" ng-click="cancel()">
+        Discard
+      </md-button>
+      <md-button class="md-raised md-primary md-button md-ink-ripple" ng-click="save(selectedContact)" style="margin-right:20px; width: 150px;" ng-disabled="disableBtn">
+        <md-progress-circular ng-show="showSaveProgress" class="md-hue-2" md-diameter="20px" md-mode="indeterminate" style="    position: absolute; left: 15%; top: 22%;"></md-progress-circular> Save
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

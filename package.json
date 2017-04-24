@@ -1,0 +1,17 @@
+{
+  "name": "ContactManager",
+  "version": "1.0.0",
+  "description": "Contact Manager App",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron-prebuilt": "^1.2.0"
+  },
+  "dependencies": {
+    "alasql": "^0.3.1",
+    "cozy-vcard": "^0.2.17",
+    "electron-packager": "^7.7.0"
+  }
+}
