@@ -3,7 +3,17 @@ const {app, BrowserWindow} = require('electron')
 let win
 
 function createWindow () {
-  win = new BrowserWindow({width:1024, height: 768, frame: false, icon: __dirname + '/app.ico'})
+  win = new BrowserWindow(
+    {
+      width: 1024,
+      height: 768,
+      frame: false,
+      icon: __dirname + '/app.ico',
+      webPreferences: {
+        devTools: false
+      }
+    }
+  )
 
   win.loadURL(`file://${__dirname}/index.html`)
   win.maximize()
