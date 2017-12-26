@@ -58,8 +58,8 @@ electron-packager <sourcedir> <appname> --platform=<platform> --arch=<arch> [opt
     4.4 `arm64`
     
 5.   `[optional flags]`
-5.1 `asar`: Whether to package the application's source code into an archive, using Electron's archive format `Boolean (default: false)
+    5.1 `asar`: Whether to package the application's source code into an archive, using Electron's archive format `Boolean (default: false).
 
-5.2 `icon`: The local path to the icon file, if the target platform supports setting embedding an icon. `String`
+     5.2 `icon`: The local path to the icon file, if the target platform supports setting embedding an icon. `String`
 
 [Read more](https://github.com/electron-userland/electron-packager/blob/master/docs/api.md)
