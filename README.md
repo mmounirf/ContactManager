@@ -36,16 +36,27 @@ electron-packager <sourcedir> <appname> --platform=<platform> --arch=<arch> [opt
  1. `<sourcedir>`: Directory where the output package should be saved.
  2. `<appname>`: Executable file name
  3. `<platform>`: Targeted Platform
+ 
     3.1  `linux`
+    
     3.2 `win32`
+    
     3.3 `darwin`
+    
     3.4 `mas`
+    
     3.5 `all`
+    
  4. `<platform>`: Targeted Platform Architecture
+ 
     4.1 `ia32`
+    
     4.2 `x64`
+    
     4.3 `armv7l`
+    
     4.4 `arm64`
+    
 5.   `[optional flags]`
     5.1 `asar` Whether to package the application's source code into an archive, using Electron's archive format `Boolean (default: false)`
     5.2 `icon` The local path to the icon file, if the target platform supports setting embedding an icon. `String`
