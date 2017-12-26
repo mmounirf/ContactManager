@@ -8,13 +8,9 @@ Simple tool that let you manage your phone contacts vCard file (.vcf), simply im
 - Electron Atom
 
 ## How to use
-- Clone repo
+- Open terminal and Clone repo
 ```sh
-git clone https://github.com/mmounirf/ContactManager
-```
-- Go to downloaded directory .
-```sh
-cd ContactManager
+git clone https://github.com/mmounirf/ContactManager && cd ContactManager
 ```
 - Install dependencies.
 ```sh
